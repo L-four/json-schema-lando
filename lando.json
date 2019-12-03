@@ -20,7 +20,51 @@
       "type": "array"
     },
     "events": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "pre-destroy":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-destroy":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-init":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-init":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-rebuild":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-rebuild":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-restart":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-restart":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-start":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-start":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-stop":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-stop":  {
+          "$ref": "#/definitions/script"
+        },
+        "pre-uninstall":  {
+          "$ref": "#/definitions/script"
+        },
+        "post-uninstall":  {
+          "$ref": "#/definitions/script"
+        }
+      }
     },
     "post-start": {
       "type": "array"
@@ -55,7 +99,22 @@
     }
   },
   "definitions": {
-    "command": {
+    "script": {
+      "description": "Shell script",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "program": {
+      "description": "program",
       "oneOf": [
         {
           "type": "string"
@@ -115,16 +174,16 @@
               "$ref": "#/definitions/services_overrides"
             },
             "build": {
-              "$ref": "#/definitions/command"
+              "$ref": "#/definitions/script"
             },
             "build_as_root": {
-              "$ref": "#/definitions/command"
+              "$ref": "#/definitions/script"
             },
             "run": {
-              "$ref": "#/definitions/command"
+              "$ref": "#/definitions/script"
             },
             "run_as_root": {
-              "$ref": "#/definitions/command"
+              "$ref": "#/definitions/script"
             },
             "moreHttpPorts": {
               "type": "array",
@@ -187,18 +246,7 @@
           "type": "object",
           "properties": {
             "cmd": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "patternProperties": {
-                    "^.*$": {
-                      "type": "object"
-                    }
-                  }
-                }
-              ]
+              "$ref": "#/definitions/program"
             },
             "description": {
               "type": "string"
