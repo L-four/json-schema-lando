@@ -1,0 +1,325 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "required": [
+    "name",
+    "recipe"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the app used in local urls",
+      "examples": [
+        "my-first-app"
+      ]
+    },
+    "compose": {
+      "type": "array"
+    },
+    "env_file": {
+      "type": "array"
+    },
+    "events": {
+      "type": "object"
+    },
+    "post-start": {
+      "type": "array"
+    },
+    "recipe": {
+      "type": "string",
+      "enum": [
+        "backdrop",
+        "lamp",
+        "lemp",
+        "mean",
+        "drupal6",
+        "drupal7",
+        "drupal8",
+        "joomla",
+        "wordpress",
+        "laravel",
+        "pantheon"
+      ]
+    },
+    "config": {
+      "$ref": "#/definitions/config"
+    },
+    "proxy": {
+      "type": "object"
+    },
+    "services": {
+      "type": "object"
+    },
+    "tooling": {
+      "$ref": "#/definitions/tooling"
+    }
+  },
+  "definitions": {
+    "command": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "services": {
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "examples": [
+                "some-service:with-optional-version"
+              ],
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "apache",
+                    "custom",
+                    "dotnet",
+                    "elasticsearch",
+                    "go",
+                    "mailhog",
+                    "mariadb",
+                    "memcached",
+                    "mongo",
+                    "mssql",
+                    "mysql",
+                    "nginx",
+                    "node",
+                    "php",
+                    "phpmyadmin",
+                    "postgres",
+                    "python",
+                    "redis",
+                    "ruby",
+                    "solr",
+                    "tomcat",
+                    "varnish",
+                    "Build Step"
+                  ]
+                }
+              ]
+            },
+            "overrides": {
+              "$ref": "#/definitions/services_overrides"
+            },
+            "build": {
+              "$ref": "#/definitions/command"
+            },
+            "build_as_root": {
+              "$ref": "#/definitions/command"
+            },
+            "run": {
+              "$ref": "#/definitions/command"
+            },
+            "run_as_root": {
+              "$ref": "#/definitions/command"
+            },
+            "moreHttpPorts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "scanner": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "services_overrides": {
+      "properties": {
+        "environment": {
+          "patternProperties": {
+            "^.*$": {
+              "type": "string",
+              "examples": [
+                {
+                  "STUFF": "THINGS",
+                  "THINGS": "GUYS"
+                }
+              ]
+            }
+          }
+        },
+        "image": {
+          "type": "string"
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": ".*:.*",
+            "examples": [
+              "./mythings:/tmp/mythings"
+            ]
+          }
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "8888"
+            ]
+          ]
+        }
+      }
+    },
+    "tooling": {
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "cmd": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "patternProperties": {
+                    "^.*$": {
+                      "type": "object"
+                    }
+                  }
+                }
+              ]
+            },
+            "description": {
+              "type": "string"
+            },
+            "service": {
+              "type": "string",
+              "default": "appserver"
+            },
+            "user": {
+              "type": "string"
+            },
+            "options": {
+              "patternProperties": {
+                "^.*$": {
+                  "type": "object",
+                  "properties": {
+                    "default": {
+                      "type": "string"
+                    },
+                    "describe": {
+                      "type": "string"
+                    },
+                    "passthrough": {
+                      "type": "boolean"
+                    },
+                    "alias": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "interactive": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "input"
+                          ]
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "default": {
+                          "type": "string"
+                        },
+                        "weight": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "config": {
+      "properties": {
+        "php": {
+          "type": "string",
+          "pattern": "[0-9]+(\\.[0-9]+){1,2}"
+        },
+        "via": {
+          "type": "string",
+          "enum": [
+            "nginx",
+            "apache"
+          ]
+        },
+        "webroot": {
+          "type": "string",
+          "default": "."
+        },
+        "database": {
+          "type": "string"
+        },
+        "drush": {
+          "type": "string",
+          "examples": [
+            "^8",
+            "^7",
+            "*"
+          ]
+        },
+        "xdebug": {
+          "type": "boolean"
+        },
+        "config": {
+          "$ref": "#/definitions/config_files"
+        }
+      }
+    },
+    "config_files": {
+      "database": {
+        "type": "string",
+        "examples": [
+          "config/my-custom.cnf"
+        ]
+      },
+      "php": {
+        "type": "string",
+        "examples": [
+          "config/php.ini"
+        ]
+      },
+      "server": {
+        "type": "string",
+        "examples": [
+          "config/server.conf"
+        ]
+      },
+      "vhosts": {
+        "type": "string",
+        "examples": [
+          "config/default.conf"
+        ]
+      }
+    }
+  }
+}
