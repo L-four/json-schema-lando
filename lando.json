@@ -92,7 +92,7 @@
       "type": "object"
     },
     "services": {
-      "type": "object"
+      "$ref": "#/definitions/services"
     },
     "tooling": {
       "$ref": "#/definitions/tooling"
@@ -129,14 +129,14 @@
     },
     "services": {
       "patternProperties": {
-        "^.*$": {
+        "": {
           "type": "object",
           "properties": {
             "type": {
               "examples": [
                 "some-service:with-optional-version"
               ],
-              "oneOf": [
+              "anyOf": [
                 {
                   "type": "string"
                 },
@@ -203,7 +203,7 @@
       "properties": {
         "environment": {
           "patternProperties": {
-            "^.*$": {
+            "": {
               "type": "string",
               "examples": [
                 {
@@ -242,7 +242,7 @@
     },
     "tooling": {
       "patternProperties": {
-        "^.*$": {
+        "": {
           "type": "object",
           "properties": {
             "cmd": {
@@ -260,7 +260,7 @@
             },
             "options": {
               "patternProperties": {
-                "^.*$": {
+                "": {
                   "type": "object",
                   "properties": {
                     "default": {
@@ -318,14 +318,16 @@
           "enum": [
             "nginx",
             "apache"
-          ]
+          ],
+          "default": "apache"
         },
         "webroot": {
           "type": "string",
           "default": "."
         },
         "database": {
-          "type": "string"
+          "type": "string",
+          "default": "mysql"
         },
         "drush": {
           "type": "string",
