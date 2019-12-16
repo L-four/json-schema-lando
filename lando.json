@@ -22,46 +22,46 @@
     "events": {
       "type": "object",
       "properties": {
-        "pre-destroy":  {
+        "pre-destroy": {
           "$ref": "#/definitions/event"
         },
-        "post-destroy":  {
+        "post-destroy": {
           "$ref": "#/definitions/event"
         },
-        "pre-init":  {
+        "pre-init": {
           "$ref": "#/definitions/event"
         },
-        "post-init":  {
+        "post-init": {
           "$ref": "#/definitions/event"
         },
-        "pre-rebuild":  {
+        "pre-rebuild": {
           "$ref": "#/definitions/event"
         },
-        "post-rebuild":  {
+        "post-rebuild": {
           "$ref": "#/definitions/event"
         },
-        "pre-restart":  {
+        "pre-restart": {
           "$ref": "#/definitions/event"
         },
-        "post-restart":  {
+        "post-restart": {
           "$ref": "#/definitions/event"
         },
-        "pre-start":  {
+        "pre-start": {
           "$ref": "#/definitions/event"
         },
-        "post-start":  {
+        "post-start": {
           "$ref": "#/definitions/event"
         },
-        "pre-stop":  {
+        "pre-stop": {
           "$ref": "#/definitions/event"
         },
-        "post-stop":  {
+        "post-stop": {
           "$ref": "#/definitions/event"
         },
-        "pre-uninstall":  {
+        "pre-uninstall": {
           "$ref": "#/definitions/event"
         },
-        "post-uninstall":  {
+        "post-uninstall": {
           "$ref": "#/definitions/event"
         }
       }
@@ -87,8 +87,12 @@
     },
     "config": {
       "oneOf": [
-        {"$ref": "#/definitions/recipe_config_drupal8"},
-        {"$ref": "#/definitions/recipe_config_lemp"}
+        {
+          "$ref": "#/definitions/recipe_config_drupal8"
+        },
+        {
+          "$ref": "#/definitions/recipe_config_lemp"
+        }
       ]
     },
     "proxy": {
@@ -162,13 +166,16 @@
           "$ref": "#/definitions/script"
         },
         {
-          "type": "object",
-          "patternProperties": {
-            "": {
-              "$ref": "#/definitions/script"
-            }
-          },
-          "additionalProperties": false
+          "type": "array",
+          "items": {
+            "type": "object",
+            "patternProperties": {
+              "": {
+                "$ref": "#/definitions/script"
+              }
+            },
+            "additionalProperties": false
+          }
         }
       ]
     },
@@ -204,11 +211,21 @@
       "patternProperties": {
         "": {
           "oneOf": [
-            { "$ref": "#/definitions/service_node" },
-            { "$ref": "#/definitions/service_mailhog" },
-            { "$ref": "#/definitions/service_mariadb" },
-            { "$ref": "#/definitions/service_phpmyadmin" },
-            { "$ref": "#/definitions/service_nginx" }
+            {
+              "$ref": "#/definitions/service_node"
+            },
+            {
+              "$ref": "#/definitions/service_mailhog"
+            },
+            {
+              "$ref": "#/definitions/service_mariadb"
+            },
+            {
+              "$ref": "#/definitions/service_phpmyadmin"
+            },
+            {
+              "$ref": "#/definitions/service_nginx"
+            }
           ]
         }
       },
@@ -414,9 +431,12 @@
         },
         "portforward": {
           "oneOf": [
-            {"type": "integer"},
             {
-              "type": "boolean"}
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
           ]
         },
         "scanner": {
