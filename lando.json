@@ -23,46 +23,46 @@
       "type": "object",
       "properties": {
         "pre-destroy":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-destroy":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-init":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-init":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-rebuild":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-rebuild":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-restart":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-restart":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-start":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-start":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-stop":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-stop":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "pre-uninstall":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         },
         "post-uninstall":  {
-          "$ref": "#/definitions/script"
+          "$ref": "#/definitions/event"
         }
       }
     },
@@ -86,7 +86,10 @@
       ]
     },
     "config": {
-      "$ref": "#/definitions/config"
+      "oneOf": [
+        {"$ref": "#/definitions/recipe_config_drupal8"},
+        {"$ref": "#/definitions/recipe_config_lemp"}
+      ]
     },
     "proxy": {
       "type": "object"
@@ -99,6 +102,76 @@
     }
   },
   "definitions": {
+    "recipe_config_drupal8": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/recipe_config_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "drush": {
+          "type": "string",
+          "examples": [
+            "^8",
+            "^7",
+            "*"
+          ]
+        }
+      }
+    },
+    "recipe_config_lemp": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/recipe_config_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "config": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "type": "string",
+              "default": "config/nginx.conf.tpl",
+              "examples": [
+                "config/nginx.conf.tpl"
+              ]
+            },
+            "vhosts": {
+              "type": "string",
+              "default": "config/default.conf.tpl",
+              "examples": [
+                "config/default.conf.tpl"
+              ]
+            },
+            "param": {
+              "type": "string",
+              "default": "config/fastcgi_params",
+              "examples": [
+                "config/fastcgi_params"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "event": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/script"
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            "": {
+              "$ref": "#/definitions/script"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
     "script": {
       "description": "Shell script",
       "oneOf": [
@@ -497,7 +570,7 @@
       },
       "additionalProperties": false
     },
-    "config": {
+    "recipe_config_base": {
       "properties": {
         "php": {
           "type": "string",
@@ -526,14 +599,6 @@
         "database": {
           "type": "string",
           "default": "mysql"
-        },
-        "drush": {
-          "type": "string",
-          "examples": [
-            "^8",
-            "^7",
-            "*"
-          ]
         },
         "xdebug": {
           "type": "boolean"
