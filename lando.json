@@ -130,54 +130,139 @@
     "services": {
       "patternProperties": {
         "": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "$ref": "#/definitions/services_type"
-            },
-            "overrides": {
-              "$ref": "#/definitions/services_overrides"
-            },
-            "build": {
-              "$ref": "#/definitions/script"
-            },
-            "build_as_root": {
-              "$ref": "#/definitions/script"
-            },
-            "run": {
-              "$ref": "#/definitions/script"
-            },
-            "run_as_root": {
-              "$ref": "#/definitions/script"
-            },
-            "ssl": {
-              "type": "boolean"
-            },
-            "command": {
-              "$ref": "#/definitions/script"
-            },
-            "globals": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "port": {
-              "type": "integer"
-            },
-            "moreHttpPorts": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "scanner": {
-              "type": "boolean"
-            }
-          }
+          "oneOf": [
+            { "$ref": "#/definitions/service_node" },
+            { "$ref": "#/definitions/service_mailhog" },
+            { "$ref": "#/definitions/service_mariadb" }
+          ]
         }
       },
       "additionalProperties": false
+    },
+    "service_mariadb": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "mariadb(:.*)?"
+        },
+        "creds": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "database": {
+              "type": "string"
+            }
+          }
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "database": {
+              "type": "string"
+            }
+          },
+        }
+      }
+    },
+    "service_mailhog": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "mailhog(:.*)?"
+        },
+        "hogfrom": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "service_node": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "node(:.*)?"
+        },
+        "globals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "service_base": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/services_type"
+        },
+        "overrides": {
+          "$ref": "#/definitions/services_overrides"
+        },
+        "build": {
+          "$ref": "#/definitions/script"
+        },
+        "build_as_root": {
+          "$ref": "#/definitions/script"
+        },
+        "run": {
+          "$ref": "#/definitions/script"
+        },
+        "run_as_root": {
+          "$ref": "#/definitions/script"
+        },
+        "ssl": {
+          "type": "boolean"
+        },
+        "command": {
+          "$ref": "#/definitions/script"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "moreHttpPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "portforward": {
+          "oneOf": [
+            {"type": "integer"},
+            {
+              "type": "boolean"}
+          ]
+        },
+        "scanner": {
+          "type": "boolean"
+        }
+      }
     },
     "services_type": {
       "examples": [
