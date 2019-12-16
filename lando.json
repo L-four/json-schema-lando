@@ -133,7 +133,8 @@
           "oneOf": [
             { "$ref": "#/definitions/service_node" },
             { "$ref": "#/definitions/service_mailhog" },
-            { "$ref": "#/definitions/service_mariadb" }
+            { "$ref": "#/definitions/service_mariadb" },
+            { "$ref": "#/definitions/service_phpmyadmin" }
           ]
         }
       },
@@ -173,6 +174,44 @@
             }
           }
         }
+      }
+    },
+    "service_phpmyadmin": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "phpmyadmin(:.*)?"
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            [
+              "database",
+              "database_2",
+              "mysql"
+            ]
+          ]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "config": {
+              "type": "string",
+              "examples": [
+                "config/config.user.inc.php"
+              ]
+            }
+          }
+        },
       }
     },
     "service_mailhog": {
