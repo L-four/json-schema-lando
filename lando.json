@@ -134,11 +134,59 @@
             { "$ref": "#/definitions/service_node" },
             { "$ref": "#/definitions/service_mailhog" },
             { "$ref": "#/definitions/service_mariadb" },
-            { "$ref": "#/definitions/service_phpmyadmin" }
+            { "$ref": "#/definitions/service_phpmyadmin" },
+            { "$ref": "#/definitions/service_nginx" }
           ]
         }
       },
       "additionalProperties": false
+    },
+    "service_nginx": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "nginx(:.*)?"
+        },
+        "webroot": {
+          "type": "string",
+          "default": "."
+        },
+        "ssl": {
+          "type": "boolean"
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "type": "string",
+              "default": "config/nginx.conf.tpl",
+              "examples": [
+                "config/nginx.conf.tpl"
+              ]
+            },
+            "vhosts": {
+              "type": "string",
+              "default": "config/default.conf.tpl",
+              "examples": [
+                "config/default.conf.tpl"
+              ]
+            },
+            "param": {
+              "type": "string",
+              "default": "config/fastcgi_params",
+              "examples": [
+                "config/fastcgi_params"
+              ]
+            }
+          }
+        }
+      }
     },
     "service_mariadb": {
       "allOf": [
@@ -211,7 +259,7 @@
               ]
             }
           }
-        },
+        }
       }
     },
     "service_mailhog": {
