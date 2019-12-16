@@ -133,42 +133,7 @@
           "type": "object",
           "properties": {
             "type": {
-              "examples": [
-                "some-service:with-optional-version"
-              ],
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "string",
-                  "enum": [
-                    "apache",
-                    "custom",
-                    "dotnet",
-                    "elasticsearch",
-                    "go",
-                    "mailhog",
-                    "mariadb",
-                    "memcached",
-                    "mongo",
-                    "mssql",
-                    "mysql",
-                    "nginx",
-                    "node",
-                    "php",
-                    "phpmyadmin",
-                    "postgres",
-                    "python",
-                    "redis",
-                    "ruby",
-                    "solr",
-                    "tomcat",
-                    "varnish",
-                    "Build Step"
-                  ]
-                }
-              ]
+              "$ref": "#/definitions/services_type"
             },
             "overrides": {
               "$ref": "#/definitions/services_overrides"
@@ -185,6 +150,21 @@
             "run_as_root": {
               "$ref": "#/definitions/script"
             },
+            "ssl": {
+              "type": "boolean"
+            },
+            "command": {
+              "$ref": "#/definitions/script"
+            },
+            "globals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "port": {
+              "type": "integer"
+            },
             "moreHttpPorts": {
               "type": "array",
               "items": {
@@ -198,6 +178,44 @@
         }
       },
       "additionalProperties": false
+    },
+    "services_type": {
+      "examples": [
+        "some-service:with-optional-version"
+      ],
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "apache",
+            "custom",
+            "dotnet",
+            "elasticsearch",
+            "go",
+            "mailhog",
+            "mariadb",
+            "memcached",
+            "mongo",
+            "mssql",
+            "mysql",
+            "nginx",
+            "node",
+            "php",
+            "phpmyadmin",
+            "postgres",
+            "python",
+            "redis",
+            "ruby",
+            "solr",
+            "tomcat",
+            "varnish",
+            "Build Step"
+          ]
+        }
+      ]
     },
     "services_overrides": {
       "properties": {
@@ -312,7 +330,7 @@
         "php": {
           "type": "string",
           "pattern": "[0-9]+(\\.[0-9]+){1,2}",
-          "default": "php:7.4"
+          "default": "7.4"
         },
         "via": {
           "anyOf": [
