@@ -381,10 +381,18 @@
           "pattern": "node(:.*)?"
         },
         "globals": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "type": "object",
+          "description": "Mapping of package: version",
+          "patternProperties": {
+            "": {
+              "type": "string"
+            }
+          },
+          "examples": [
+            {
+              "gulp-cli": "latest"
+            }
+          ]
         }
       }
     },
