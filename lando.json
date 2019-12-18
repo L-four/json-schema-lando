@@ -206,7 +206,7 @@
     "services": {
       "patternProperties": {
         "": {
-          "oneOf": [
+          "anyOf": [
             {
               "$ref": "#/definitions/service_node"
             },
@@ -221,6 +221,9 @@
             },
             {
               "$ref": "#/definitions/service_nginx"
+            },
+            {
+              "$ref": "#/definitions/service_php"
             }
           ]
         }
@@ -268,6 +271,74 @@
               "default": "config/fastcgi_params",
               "examples": [
                 "config/fastcgi_params"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "service_php": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/service_base"
+        }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "php(:.*)?"
+        },
+        "via": {
+          "type": "string",
+          "enum": [
+            "nginx",
+            "apache",
+            "cli"
+          ]
+        },
+        "webroot":{
+          "type": "string",
+          "default": "."
+        },
+        "xdebug":{
+          "type": "boolean"
+        },
+        "composer": {
+          "type": "object",
+          "patternProperties": {
+            "": {
+              "type": "string"
+            }
+          },
+          "examples": [
+            {
+              "phpunit/phpunit": "^6.5"
+            }
+          ]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "database": {
+              "type": "string"
+            },
+            "php": {
+              "type": "string",
+              "examples": [
+                "config/php.ini"
+              ]
+            },
+            "server": {
+              "type": "string",
+              "examples": [
+                "config/nginx.conf"
+              ]
+            },
+            "vhosts": {
+              "type": "string",
+              "examples": [
+                "config/default.conf"
               ]
             }
           }
@@ -407,6 +478,18 @@
           "$ref": "#/definitions/services_overrides"
         },
         "build": {
+          "$ref": "#/definitions/script"
+        },
+        "build_as_root_internal": {
+          "$ref": "#/definitions/script"
+        },
+        "build_internal": {
+          "$ref": "#/definitions/script"
+        },
+        "run_as_root_internal": {
+          "$ref": "#/definitions/script"
+        },
+        "run_internal": {
           "$ref": "#/definitions/script"
         },
         "build_as_root": {
